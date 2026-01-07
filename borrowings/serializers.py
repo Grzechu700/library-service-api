@@ -24,9 +24,9 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
 
     def validate_book(self, value):
         """Check if book has available inventory"""
-        if value.inventory == 0:
+        if value.inventory <= 0:
             raise serializers.ValidationError(
-                "This book is currently unavailable (inventory is 0)."
+                "This book is currently unavailable (no copies in inventory)."
             )
         return value
 
@@ -38,7 +38,9 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         book.inventory -= 1
         book.save()
 
-        # Attach current user (from context)
-        validated_data["user"] = self.context["request"].user
+        request = self.context.get("request")
+        if not request or not request.user:
+            raise serializers.ValidationError("Authentication required")
+        validated_data["user"] = request.user
 
         return super().create(validated_data)
