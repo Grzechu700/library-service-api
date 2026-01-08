@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
-from datetime import date
+from django.utils import timezone
 from .models import Borrowing
 from .serializers import BorrowingReadSerializer, BorrowingCreateSerializer
 
@@ -71,7 +71,7 @@ class BorrowingViewSet(mixins.ListModelMixin,
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        borrowing.actual_return_date = date.today()
+        borrowing.actual_return_date = timezone.now().date()
         borrowing.save()
 
         book = borrowing.book
