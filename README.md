@@ -63,7 +63,7 @@ CREATE DATABASE library_service_db;
 5. **Configure environment variables**
 Create `.env` file in project root:
 ```env
-SECRET_KEY=your-secret-key-here
+SECRET_KEY=django-insecure-change-this-in-production
 DEBUG=True
 DATABASE_NAME=library_service_db
 DATABASE_USER=postgres
