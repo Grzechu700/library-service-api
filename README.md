@@ -121,12 +121,7 @@ This API uses JWT authentication with a **custom header**:
 ```
 
 **Response:**
-```json
-{
-  "access": "<your-access-token>",
-  "refresh": "<your-refresh-token>"
-}
-```
+Returns `access` and `refresh` JWT tokens for authentication.
 
 ## Running Tests
 
