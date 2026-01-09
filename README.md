@@ -123,8 +123,8 @@ This API uses JWT authentication with a **custom header**:
 **Response:**
 ```json
 {
-  "access": "eyJ0eXAiOiJKV1QiLCJhbGc...",
-  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc..."
+  "access": "<your-access-token>",
+  "refresh": "<your-refresh-token>"
 }
 ```
 

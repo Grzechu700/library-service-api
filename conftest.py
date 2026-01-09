@@ -32,15 +32,17 @@ def admin_user(db):
 
 @pytest.fixture
 def auth_client(api_client, user):
+    # Test fixture - token generated dynamically, not a hardcoded secret
     refresh = RefreshToken.for_user(user)
-    api_client.credentials(HTTP_AUTHORIZE=f'Bearer {refresh.access_token}')
+    api_client.credentials(HTTP_AUTHORIZE=f"Bearer {refresh.access_token}")
     return api_client
 
 
 @pytest.fixture
 def admin_client(api_client, admin_user):
+    # Test fixture - token generated dynamically, not a hardcoded secret
     refresh = RefreshToken.for_user(admin_user)
-    api_client.credentials(HTTP_AUTHORIZE=f'Bearer {refresh.access_token}')
+    api_client.credentials(HTTP_AUTHORIZE=f"Bearer {refresh.access_token}")
     return api_client
 
 

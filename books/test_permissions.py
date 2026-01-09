@@ -40,3 +40,14 @@ class TestPermissions:
         response = api_client.get(url)
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_unauthorized_cannot_create_borrowings(self, api_client):
+        """Test unauthorized user cannot create borrowings"""
+        url = reverse('borrowing-list')
+        data = {
+            'book': 1,
+            'expected_return_date': '2026-01-20'
+        }
+        response = api_client.post(url, data)
+
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED

@@ -58,3 +58,31 @@ class TestFiltering:
         response = admin_client.get(url, {'user_id': user1.id})
 
         assert response.data['count'] == 1
+
+    def test_non_admin_cannot_filter_by_other_user(self, auth_client, user, book):
+        """Test non-admin cannot use user_id to see other users' borrowings"""
+        other_user = User.objects.create_user(
+            email="other_user@test.com",
+            password="pass"
+        )
+
+        # Create borrowings for both users
+        own_borrowing = Borrowing.objects.create(
+            user=user,
+            book=book,
+            expected_return_date=date.today() + timedelta(days=1)
+        )
+        other_borrowing = Borrowing.objects.create(
+            user=other_user,
+            book=book,
+            expected_return_date=date.today() + timedelta(days=1)
+        )
+
+        # Try to filter by other user's ID
+        url = reverse('borrowing-list')
+        response = auth_client.get(url, {'user_id': other_user.id})
+
+        assert response.status_code == status.HTTP_200_OK
+        # Should only see own borrowing, user_id filter ignored for non-admin
+        assert response.data['count'] == 1
+        assert response.data['results'][0]['id'] == own_borrowing.id
