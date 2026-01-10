@@ -30,6 +30,20 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
             )
         return value
 
+    def validate(self, attrs):  # DODAJ NOWĄ METODĘ
+        """Validate that expected_return_date is after borrow_date"""
+        from datetime import date
+
+        expected_return_date = attrs.get("expected_return_date")
+        borrow_date = date.today()  # borrow_date is auto_now_add, so it's today
+
+        if expected_return_date and expected_return_date <= borrow_date:
+            raise serializers.ValidationError({
+                "expected_return_date": "Expected return date must be after the borrow date."
+            })
+
+        return attrs
+
     def create(self, validated_data):
         """Create borrowing and decrease book inventory"""
         book = validated_data["book"]
